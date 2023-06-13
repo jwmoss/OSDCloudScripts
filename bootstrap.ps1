@@ -28,11 +28,9 @@ $Params = @{
 }
 Start-OSDCloud @Params
 
+Install-WindowsUpdate -UpdateType Driver -AcceptAll -IgnoreReboot
 # Set-ExecutionPolicy Unrestricted -Force
 # & {Invoke-Expression (Invoke-RestMethod 'https://raw.githubusercontent.com/jwmoss/ronin_puppet/win11/provisioners/windows/OSDCloud/bootstrap.ps1')}
-
-Invoke-Expression (Invoke-RestMethod functions.osdcloud.com)
-OSDCloud-UpdateDrivers
 
 Write-Host -ForegroundColor Green "Create C:\Windows\Setup\Scripts\SetupComplete.cmd"
 $SetupCompleteCMD = @'
