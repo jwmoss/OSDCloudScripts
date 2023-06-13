@@ -6,6 +6,8 @@ if ((Get-MyComputerModel) -match 'Virtual') {
     Set-DisRes 1600
 }
 
+Set-ExecutionPolicy Unrestricted -Force
+
 Write-Host -ForegroundColor Green "Updating OSD PowerShell Module"
 Install-Module OSD -Force
 
@@ -26,6 +28,12 @@ $Params = @{
 }
 Start-OSDCloud @Params
 
+# Set-ExecutionPolicy Unrestricted -Force
+# & {Invoke-Expression (Invoke-RestMethod 'https://raw.githubusercontent.com/jwmoss/ronin_puppet/win11/provisioners/windows/OSDCloud/bootstrap.ps1')}
+
+Invoke-Expression (Invoke-RestMethod functions.osdcloud.com)
+OSDCloud-UpdateDrivers
+
 Write-Host -ForegroundColor Green "Create C:\Windows\Setup\Scripts\SetupComplete.cmd"
 $SetupCompleteCMD = @'
 powershell.exe -Command Set-ExecutionPolicy RemoteSigned -Force
@@ -34,5 +42,5 @@ powershell.exe -Command "& {IEX (IRM 'https://raw.githubusercontent.com/jwmoss/r
 $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.cmd' -Encoding ascii -Force
 
 Write-Host -ForegroundColor Green "Restarting in 20 seconds!"
-Start-Sleep -Seconds 20
-wpeutil reboot
+#Start-Sleep -Seconds 20
+#wpeutil reboot
