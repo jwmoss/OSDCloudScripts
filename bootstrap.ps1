@@ -1,18 +1,18 @@
 #================================================
 #   [PreOS] Update Module
 #================================================
-if ((Get-MyComputerModel) -match 'Virtual') {
-    Write-Host -ForegroundColor Green "Setting Display Resolution to 1600x"
-    Set-DisRes 1600
-}
+# if ((Get-MyComputerModel) -match 'Virtual') {
+#     Write-Host -ForegroundColor Green "Setting Display Resolution to 1600x"
+#     Set-DisRes 1600
+# }
 
-Set-ExecutionPolicy Unrestricted -Force
+# Set-ExecutionPolicy Unrestricted -Force
 
-Write-Host -ForegroundColor Green "Updating OSD PowerShell Module"
-Install-Module OSD -Force
+# Write-Host -ForegroundColor Green "Updating OSD PowerShell Module"
+# Install-Module OSD -Force
 
-Write-Host -ForegroundColor Green "Importing OSD PowerShell Module"
-Import-Module OSD -Force   
+# Write-Host -ForegroundColor Green "Importing OSD PowerShell Module"
+# Import-Module OSD -Force   
 
 #=======================================================================
 #   [OS] Params and Start-OSDCloud
@@ -40,5 +40,5 @@ powershell.exe -Command "& {IEX (IRM 'https://raw.githubusercontent.com/jwmoss/r
 $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.cmd' -Encoding ascii -Force
 
 Write-Host -ForegroundColor Green "Restarting in 20 seconds!"
-#Start-Sleep -Seconds 20
-#wpeutil reboot
+Start-Sleep -Seconds 20
+wpeutil reboot
