@@ -6,13 +6,13 @@
 #     Set-DisRes 1600
 # }
 
-# Set-ExecutionPolicy Unrestricted -Force
+Set-ExecutionPolicy Unrestricted -Force
 
 # Write-Host -ForegroundColor Green "Updating OSD PowerShell Module"
-# Install-Module OSD -Force
+Install-Module OSD -Force
 
 # Write-Host -ForegroundColor Green "Importing OSD PowerShell Module"
-# Import-Module OSD -Force   
+Import-Module OSD -Force   
 
 #=======================================================================
 #   [OS] Params and Start-OSDCloud
@@ -27,15 +27,13 @@ $Params = @{
     Firmware = $false
 }
 
-Try {
-    Start-OSDCloud @Params -ErrorAction "Stop"
-}
-Catch {
-    $_
-    Start-Sleep -Seconds 30
-}
-
-
+# Try {
+Start-OSDCloud @Params
+# }
+# Catch {
+#     $_
+#     Start-Sleep -Seconds 30
+# }
 
 #Install-WindowsUpdate -UpdateType Driver -AcceptAll -IgnoreReboot
 # Set-ExecutionPolicy Unrestricted -Force
@@ -48,7 +46,7 @@ powershell.exe -Command "& {IEX (IRM 'https://raw.githubusercontent.com/jwmoss/r
 '@
 $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.cmd' -Encoding ascii -Force
 
-#& "X:\OSDCloud\Config\Scripts\Startup\local_keyvault.ps1"
+& "X:\OSDCloud\Config\Scripts\Startup\local_keyvault.ps1"
 
 Write-Host -ForegroundColor Green "Restarting in 20 seconds!"
 Start-Sleep -Seconds 20
