@@ -32,6 +32,7 @@ Try {
 }
 Catch {
     $_
+    Start-Sleep -Seconds 30
 }
 
 
