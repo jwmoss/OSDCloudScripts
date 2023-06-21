@@ -39,6 +39,8 @@ powershell.exe -Command "& {IEX (IRM 'https://raw.githubusercontent.com/jwmoss/r
 '@
 $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.cmd' -Encoding ascii -Force
 
+& "X:\OSDCloud\Config\Scripts\Startup\local_keyvault.ps1"
+
 Write-Host -ForegroundColor Green "Restarting in 20 seconds!"
 Start-Sleep -Seconds 20
-wpeutil reboot
+#wpeutil reboot
