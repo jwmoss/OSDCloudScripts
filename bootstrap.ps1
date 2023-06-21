@@ -28,7 +28,7 @@ $Params = @{
 }
 Start-OSDCloud @Params
 
-Install-WindowsUpdate -UpdateType Driver -AcceptAll -IgnoreReboot
+#Install-WindowsUpdate -UpdateType Driver -AcceptAll -IgnoreReboot
 # Set-ExecutionPolicy Unrestricted -Force
 # & {Invoke-Expression (Invoke-RestMethod 'https://raw.githubusercontent.com/jwmoss/ronin_puppet/win11/provisioners/windows/OSDCloud/bootstrap.ps1')}
 
