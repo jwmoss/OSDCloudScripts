@@ -26,7 +26,15 @@ $Params = @{
     ZTI = $true
     Firmware = $false
 }
-Start-OSDCloud @Params
+
+Try {
+    Start-OSDCloud @Params -ErrorAction "Stop"
+}
+Catch {
+    $_
+}
+
+
 
 #Install-WindowsUpdate -UpdateType Driver -AcceptAll -IgnoreReboot
 # Set-ExecutionPolicy Unrestricted -Force
