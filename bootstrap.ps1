@@ -9,7 +9,7 @@
 Set-ExecutionPolicy Unrestricted -Force
 
 # Write-Host -ForegroundColor Green "Updating OSD PowerShell Module"
-Install-Module OSD -Force
+Install-Module OSD -Force -SkipPublisherCheck
 
 # Write-Host -ForegroundColor Green "Importing OSD PowerShell Module"
 Import-Module OSD -Force   
