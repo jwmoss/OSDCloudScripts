@@ -19,15 +19,15 @@ powershell.exe -Command "& {IEX (IRM 'https://raw.githubusercontent.com/jwmoss/r
 '@
 $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.cmd' -Encoding ascii -Force
 
-# [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls1
-# $wc = New-Object System.Net.WebClient
-# $wc.DownloadFile("https://downloadmirror.intel.com/739771/LAN-Win11-1.1.3.34.zip" , "C:\LAN-Win11-1.1.3.34.zip")
-# $wc.Dispose()
-# New-item -Path "C:\Drivers" -Name "NUCDrivers" -ItemType Directory -Force
-# Expand-Archive -Path "C:\LAN-Win11-1.1.3.34.zip" -DestinationPath "C:\Drivers\NUCDrivers"
-# Get-ChildItem -Path "C:\Drivers\NUCDrivers" -Recurse | ForEach-Object {
-#     pnputil.exe /add-driver "$($_.FullName)" /install
-# }
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls1
+$wc = New-Object System.Net.WebClient
+$wc.DownloadFile("https://downloadmirror.intel.com/739771/LAN-Win11-1.1.3.34.zip" , "C:\LAN-Win11-1.1.3.34.zip")
+$wc.Dispose()
+New-item -Path "C:\Drivers" -Name "NUCDrivers" -ItemType Directory -Force
+Expand-Archive -Path "C:\LAN-Win11-1.1.3.34.zip" -DestinationPath "C:\Drivers\NUCDrivers"
+Get-ChildItem -Path "C:\Drivers\NUCDrivers" -Recurse | ForEach-Object {
+    pnputil.exe /add-driver "$($_.FullName)" /install
+}
 
 ## Setup driver path
 #Write-Host -ForegroundColor Green "Restarting in 20 seconds!"
