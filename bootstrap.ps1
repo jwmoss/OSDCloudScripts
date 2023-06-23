@@ -42,22 +42,29 @@ powershell.exe -Command "& {IEX (IRM 'https://raw.githubusercontent.com/jwmoss/r
 '@
 $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.cmd' -Encoding ascii -Force
 
+iwr "https://downloadmirror.intel.com/739771/LAN-Win11-1.1.3.34.zip" -OutFile "C:\LAN-Win11-1.1.3.34.zip"
+New-item -Path "C:\" -Name "NUCDrivers" -ItemType Directory -Force
+Expand-Archive -Path "C:\LAN-Win11-1.1.3.34.zip" -DestinationPath "C:\NUCDrivers"
+Get-ChildItem -Path "C:\NUCDrivers" -Recurse -Filter *.inf | ForEach-Object {
+    pnputil.exe /add-driver "$($_.FullName)" /install
+}
+
 #& "X:\OSDCloud\Config\Scripts\Shutdown\local_keyvault.ps1"
 
-if ($env:UserName -eq 'defaultuser0') {
-    if (!(Get-Module PSWindowsUpdate -ListAvailable -ErrorAction Ignore)) {
-        try {
-            Install-Module PSWindowsUpdate -Force -SkipPublisherCheck
-            Import-Module PSWindowsUpdate -Force
-        }
-        catch {
-            Write-Warning 'Unable to install PSWindowsUpdate Driver Updates'
-        }
-    }
-    if (Get-Module PSWindowsUpdate -ListAvailable -ErrorAction Ignore) {
-        Install-WindowsUpdate -UpdateType Driver -AcceptAll -IgnoreReboot
-    }
-}
+# if ($env:UserName -eq 'defaultuser0') {
+#     if (!(Get-Module PSWindowsUpdate -ListAvailable -ErrorAction Ignore)) {
+#         try {
+#             Install-Module PSWindowsUpdate -Force -SkipPublisherCheck
+#             Import-Module PSWindowsUpdate -Force
+#         }
+#         catch {
+#             Write-Warning 'Unable to install PSWindowsUpdate Driver Updates'
+#         }
+#     }
+#     if (Get-Module PSWindowsUpdate -ListAvailable -ErrorAction Ignore) {
+#         Install-WindowsUpdate -UpdateType Driver -AcceptAll -IgnoreReboot
+#     }
+# }
 
 ## Setup driver path
 #Write-Host -ForegroundColor Green "Restarting in 20 seconds!"
