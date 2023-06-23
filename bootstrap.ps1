@@ -42,7 +42,7 @@ powershell.exe -Command "& {IEX (IRM 'https://raw.githubusercontent.com/jwmoss/r
 '@
 $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.cmd' -Encoding ascii -Force
 
-& "X:\OSDCloud\Config\Scripts\Shutdown\local_keyvault.ps1"
+#& "X:\OSDCloud\Config\Scripts\Shutdown\local_keyvault.ps1"
 
 if ($env:UserName -eq 'defaultuser0') {
     if (!(Get-Module PSWindowsUpdate -ListAvailable -ErrorAction Ignore)) {
@@ -60,9 +60,9 @@ if ($env:UserName -eq 'defaultuser0') {
 }
 
 ## Setup driver path
-Write-Host -ForegroundColor Green "Restarting in 20 seconds!"
-Start-Sleep -Seconds 20
-wpeutil reboot
+#Write-Host -ForegroundColor Green "Restarting in 20 seconds!"
+#Start-Sleep -Seconds 20
+#wpeutil reboot
 
 <#
 $PathPanther = 'C:\Windows\Panther'
