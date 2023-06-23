@@ -19,31 +19,14 @@ powershell.exe -Command "& {IEX (IRM 'https://raw.githubusercontent.com/jwmoss/r
 '@
 $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.cmd' -Encoding ascii -Force
 
-[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls1
-$wc = New-Object System.Net.WebClient
-$wc.DownloadFile("https://downloadmirror.intel.com/739771/LAN-Win11-1.1.3.34.zip" , "C:\LAN-Win11-1.1.3.34.zip")
-$wc.Dispose()
-New-item -Path "C:\Drivers" -Name "NUCDrivers" -ItemType Directory -Force
-Expand-Archive -Path "C:\LAN-Win11-1.1.3.34.zip" -DestinationPath "C:\Drivers\NUCDrivers"
-Get-ChildItem -Path "C:\Drivers\NUCDrivers" -Recurse | ForEach-Object {
-    pnputil.exe /add-driver "$($_.FullName)" /install
-}
-
-#& "X:\OSDCloud\Config\Scripts\Shutdown\local_keyvault.ps1"
-
-# if ($env:UserName -eq 'defaultuser0') {
-#     if (!(Get-Module PSWindowsUpdate -ListAvailable -ErrorAction Ignore)) {
-#         try {
-#             Install-Module PSWindowsUpdate -Force -SkipPublisherCheck
-#             Import-Module PSWindowsUpdate -Force
-#         }
-#         catch {
-#             Write-Warning 'Unable to install PSWindowsUpdate Driver Updates'
-#         }
-#     }
-#     if (Get-Module PSWindowsUpdate -ListAvailable -ErrorAction Ignore) {
-#         Install-WindowsUpdate -UpdateType Driver -AcceptAll -IgnoreReboot
-#     }
+# [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls1
+# $wc = New-Object System.Net.WebClient
+# $wc.DownloadFile("https://downloadmirror.intel.com/739771/LAN-Win11-1.1.3.34.zip" , "C:\LAN-Win11-1.1.3.34.zip")
+# $wc.Dispose()
+# New-item -Path "C:\Drivers" -Name "NUCDrivers" -ItemType Directory -Force
+# Expand-Archive -Path "C:\LAN-Win11-1.1.3.34.zip" -DestinationPath "C:\Drivers\NUCDrivers"
+# Get-ChildItem -Path "C:\Drivers\NUCDrivers" -Recurse | ForEach-Object {
+#     pnputil.exe /add-driver "$($_.FullName)" /install
 # }
 
 ## Setup driver path
@@ -51,29 +34,33 @@ Get-ChildItem -Path "C:\Drivers\NUCDrivers" -Recurse | ForEach-Object {
 #Start-Sleep -Seconds 20
 #wpeutil reboot
 
-<#
 $PathPanther = 'C:\Windows\Panther'
 if (-NOT (Test-Path $PathPanther)) {
     New-Item -Path $PathPanther -ItemType Directory -Force | Out-Null
 }
 
-$UnattendDrivers = @'
+$UnattendXml = @"
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
     <settings pass="offlineServicing">
+        <component name="Microsoft-Windows-PnpCustomizationsNonWinPE" processorArchitecture="x86" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <DriverPaths>
+                <PathAndCredentials wcm:keyValue="1" wcm:action="add">
+                    <Path>$Path</Path>
+                </PathAndCredentials>
+            </DriverPaths>
+        </component>
         <component name="Microsoft-Windows-PnpCustomizationsNonWinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <DriverPaths>
                 <PathAndCredentials wcm:keyValue="1" wcm:action="add">
-                    <Path>C:\Drivers</Path>
+                    <Path>$Path</Path>
                 </PathAndCredentials>
             </DriverPaths>
         </component>
     </settings>
 </unattend>
-'@
+"@
 
 $UnattendPath = Join-Path $PathPanther 'Unattend.xml'
-Write-Verbose -Verbose "Setting Driver $UnattendPath"
-$UnattendDrivers | Out-File -FilePath $UnattendPath -Encoding utf8
-
-#>
+Write-Verbose -Verbose "Setting Driver $UnattendXml"
+$UnattendXml | Out-File -FilePath $UnattendPath -Encoding utf8
