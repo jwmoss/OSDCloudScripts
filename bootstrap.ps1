@@ -16,6 +16,10 @@ Set-ExecutionPolicy Unrestricted -Force
 
 # Start-Sleep -Seconds 20
 
+Invoke-WebRequest "https://downloadmirror.intel.com/739771/LAN-Win11-1.1.3.34.zip" -OutFile "C:\LAN-Win11-1.1.3.34.zip"
+New-item -Path "C:\" -Name "NUCDrivers" -ItemType Directory -Force
+Expand-Archive -Path "C:\LAN-Win11-1.1.3.34.zip" -DestinationPath "C:\NUCDrivers"
+
 #=======================================================================
 #   [OS] Params and Start-OSDCloud
 #=======================================================================
@@ -42,9 +46,6 @@ powershell.exe -Command "& {IEX (IRM 'https://raw.githubusercontent.com/jwmoss/r
 '@
 $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.cmd' -Encoding ascii -Force
 
-iwr "https://downloadmirror.intel.com/739771/LAN-Win11-1.1.3.34.zip" -OutFile "C:\LAN-Win11-1.1.3.34.zip"
-New-item -Path "C:\" -Name "NUCDrivers" -ItemType Directory -Force
-Expand-Archive -Path "C:\LAN-Win11-1.1.3.34.zip" -DestinationPath "C:\NUCDrivers"
 Get-ChildItem -Path "C:\NUCDrivers" -Recurse -Filter *.inf | ForEach-Object {
     pnputil.exe /add-driver "$($_.FullName)" /install
 }
