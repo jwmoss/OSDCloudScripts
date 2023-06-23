@@ -20,13 +20,13 @@ Start-Sleep -Seconds 20
 #   [OS] Params and Start-OSDCloud
 #=======================================================================
 $Params = @{
-    OSVersion = "Windows 11"
-    OSBuild = "22H2"
-    OSEdition = "Pro"
+    OSVersion  = "Windows 11"
+    OSBuild    = "22H2"
+    OSEdition  = "Pro"
     OSLanguage = "en-us"
-    OSLicense = "Retail"
-    ZTI = $true
-    Firmware = $false
+    OSLicense  = "Retail"
+    ZTI        = $true
+    Firmware   = $false
 }
 
 Start-OSDCloud @Params
@@ -43,6 +43,18 @@ powershell.exe -Command "& {IEX (IRM 'https://raw.githubusercontent.com/jwmoss/r
 $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.cmd' -Encoding ascii -Force
 
 & "X:\OSDCloud\Config\Scripts\Shutdown\local_keyvault.ps1"
+
+$OOBEDeployJson = @'
+{
+    "UpdateDrivers":  {
+                          "IsPresent":  true
+                      }
+}
+'@
+If (!(Test-Path "C:\ProgramData\OSDeploy")) {
+    New-Item "C:\ProgramData\OSDeploy" -ItemType Directory -Force | Out-Null
+}
+$OOBEDeployJson | Out-File -FilePath "C:\ProgramData\OSDeploy\OSDeploy.OOBEDeploy.json" -Encoding ascii -Force
 
 Start-OOBEDeploy -UpdateDrivers $true
 
