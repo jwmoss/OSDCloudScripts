@@ -44,19 +44,20 @@ $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.c
 
 & "X:\OSDCloud\Config\Scripts\Shutdown\local_keyvault.ps1"
 
-$OOBEDeployJson = @'
-{
-    "UpdateDrivers":  {
-                          "IsPresent":  true
-                      }
+if ($env:UserName -eq 'defaultuser0') {
+    if (!(Get-Module PSWindowsUpdate -ListAvailable -ErrorAction Ignore)) {
+        try {
+            Install-Module PSWindowsUpdate -Force -SkipPublisherCheck
+            Import-Module PSWindowsUpdate -Force
+        }
+        catch {
+            Write-Warning 'Unable to install PSWindowsUpdate Driver Updates'
+        }
+    }
+    if (Get-Module PSWindowsUpdate -ListAvailable -ErrorAction Ignore) {
+        Install-WindowsUpdate -UpdateType Driver -AcceptAll -IgnoreReboot
+    }
 }
-'@
-If (!(Test-Path "C:\ProgramData\OSDeploy")) {
-    New-Item "C:\ProgramData\OSDeploy" -ItemType Directory -Force | Out-Null
-}
-$OOBEDeployJson | Out-File -FilePath "C:\ProgramData\OSDeploy\OSDeploy.OOBEDeploy.json" -Encoding ascii -Force
-
-Start-OOBEDeploy -UpdateDrivers $true
 
 ## Setup driver path
 Write-Host -ForegroundColor Green "Restarting in 20 seconds!"
