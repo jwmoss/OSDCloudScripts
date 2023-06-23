@@ -1,28 +1,5 @@
-#================================================
-#   [PreOS] Update Module
-#================================================
-# if ((Get-MyComputerModel) -match 'Virtual') {
-#     Write-Host -ForegroundColor Green "Setting Display Resolution to 1600x"
-#     Set-DisRes 1600
-# }
-
 Set-ExecutionPolicy Unrestricted -Force
 
-# # Write-Host -ForegroundColor Green "Updating OSD PowerShell Module"
-# Install-Module OSD -Force -SkipPublisherCheck
-
-# # Write-Host -ForegroundColor Green "Importing OSD PowerShell Module"
-# Import-Module OSD -Force   
-
-# Start-Sleep -Seconds 20
-
-Invoke-WebRequest "https://downloadmirror.intel.com/739771/LAN-Win11-1.1.3.34.zip" -OutFile "C:\LAN-Win11-1.1.3.34.zip"
-New-item -Path "C:\" -Name "NUCDrivers" -ItemType Directory -Force
-Expand-Archive -Path "C:\LAN-Win11-1.1.3.34.zip" -DestinationPath "C:\NUCDrivers"
-
-#=======================================================================
-#   [OS] Params and Start-OSDCloud
-#=======================================================================
 $Params = @{
     OSVersion  = "Windows 11"
     OSBuild    = "22H2"
@@ -35,10 +12,6 @@ $Params = @{
 
 Start-OSDCloud @Params
 
-#Install-WindowsUpdate -UpdateType Driver -AcceptAll -IgnoreReboot
-# Set-ExecutionPolicy Unrestricted -Force
-# & {Invoke-Expression (Invoke-RestMethod 'https://raw.githubusercontent.com/jwmoss/ronin_puppet/win11/provisioners/windows/OSDCloud/bootstrap.ps1')}
-
 Write-Host -ForegroundColor Green "Create C:\Windows\Setup\Scripts\SetupComplete.cmd"
 $SetupCompleteCMD = @'
 powershell.exe -Command Set-ExecutionPolicy Unrestricted -Force
@@ -46,7 +19,13 @@ powershell.exe -Command "& {IEX (IRM 'https://raw.githubusercontent.com/jwmoss/r
 '@
 $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.cmd' -Encoding ascii -Force
 
-Get-ChildItem -Path "C:\NUCDrivers" -Recurse -Filter *.inf | ForEach-Object {
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls1
+$wc = New-Object System.Net.WebClient
+$wc.DownloadFile("https://downloadmirror.intel.com/739771/LAN-Win11-1.1.3.34.zip" , "C:\LAN-Win11-1.1.3.34.zip")
+$wc.Dispose()
+New-item -Path "C:\Drivers" -Name "NUCDrivers" -ItemType Directory -Force
+Expand-Archive -Path "C:\LAN-Win11-1.1.3.34.zip" -DestinationPath "C:\Drivers\NUCDrivers"
+Get-ChildItem -Path "C:\Drivers\NUCDrivers" -Recurse | ForEach-Object {
     pnputil.exe /add-driver "$($_.FullName)" /install
 }
 
