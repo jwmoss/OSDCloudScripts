@@ -8,13 +8,13 @@
 
 Set-ExecutionPolicy Unrestricted -Force
 
-# Write-Host -ForegroundColor Green "Updating OSD PowerShell Module"
-Install-Module OSD -Force -SkipPublisherCheck
+# # Write-Host -ForegroundColor Green "Updating OSD PowerShell Module"
+# Install-Module OSD -Force -SkipPublisherCheck
 
-# Write-Host -ForegroundColor Green "Importing OSD PowerShell Module"
-Import-Module OSD -Force   
+# # Write-Host -ForegroundColor Green "Importing OSD PowerShell Module"
+# Import-Module OSD -Force   
 
-Start-Sleep -Seconds 20
+# Start-Sleep -Seconds 20
 
 #=======================================================================
 #   [OS] Params and Start-OSDCloud
