@@ -14,6 +14,8 @@ Install-Module OSD -Force
 # Write-Host -ForegroundColor Green "Importing OSD PowerShell Module"
 Import-Module OSD -Force   
 
+Start-Sleep -Seconds 20
+
 #=======================================================================
 #   [OS] Params and Start-OSDCloud
 #=======================================================================
@@ -42,7 +44,14 @@ $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.c
 
 & "X:\OSDCloud\Config\Scripts\Shutdown\local_keyvault.ps1"
 
+Start-OOBEDeploy -UpdateDrivers $true
+
 ## Setup driver path
+Write-Host -ForegroundColor Green "Restarting in 20 seconds!"
+Start-Sleep -Seconds 20
+wpeutil reboot
+
+<#
 $PathPanther = 'C:\Windows\Panther'
 if (-NOT (Test-Path $PathPanther)) {
     New-Item -Path $PathPanther -ItemType Directory -Force | Out-Null
@@ -67,6 +76,4 @@ $UnattendPath = Join-Path $PathPanther 'Unattend.xml'
 Write-Verbose -Verbose "Setting Driver $UnattendPath"
 $UnattendDrivers | Out-File -FilePath $UnattendPath -Encoding utf8
 
-Write-Host -ForegroundColor Green "Restarting in 20 seconds!"
-Start-Sleep -Seconds 20
-wpeutil reboot
+#>
