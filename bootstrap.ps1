@@ -44,7 +44,6 @@ Get-ChildItem -Path "C:\Drivers\NUCDrivers" -Recurse | ForEach-Object {
 ## Setup driver path
 #Write-Host -ForegroundColor Green "Restarting in 20 seconds!"
 #Start-Sleep -Seconds 20
-#wpeutil reboot
 
 $PathPanther = 'C:\Windows\Panther'
 if (-NOT (Test-Path $PathPanther)) {
@@ -313,3 +312,4 @@ $UnattendXml = @"
 $UnattendPath = Join-Path $PathPanther 'Unattend.xml'
 Write-Verbose -Verbose "Setting Driver $UnattendXml"
 $UnattendXml | Out-File -FilePath $UnattendPath -Encoding utf8
+wpeutil reboot
