@@ -3,9 +3,9 @@ Set-ExecutionPolicy Unrestricted -Force
 $Params = @{
     OSVersion  = "Windows 11"
     OSBuild    = "22H2"
-    OSEdition  = "Pro"
+    OSEdition  = "Enterprise"
     OSLanguage = "en-us"
-    OSLicense  = "Retail"
+    OSLicense  = "OSLicense"
     ZTI        = $true
     Firmware   = $false
 }
