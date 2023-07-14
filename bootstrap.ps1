@@ -12,6 +12,8 @@ $Params = @{
 
 Start-OSDCloud @Params
 
+break
+
 Write-Host -ForegroundColor Green "Create C:\Windows\Setup\Scripts\SetupComplete.cmd"
 $SetupCompleteCMD = @'
 powershell.exe -Command Set-ExecutionPolicy Unrestricted -Force
