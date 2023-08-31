@@ -16,6 +16,7 @@ Write-Host -ForegroundColor Green "Create C:\Windows\Setup\Scripts\SetupComplete
 $SetupCompleteCMD = @'
 powershell.exe -Command Set-ExecutionPolicy Unrestricted -Force
 powershell.exe -Command "pnputil.exe /add-driver 'C:\Drivers\NUCDrivers\*.inf' /install"
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
 '@
 $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.cmd' -Encoding ascii -Force
 
@@ -234,6 +235,6 @@ $UnattendXmlTest = @"
 "@
 
 $UnattendPath = Join-Path $PathPanther 'Unattend.xml'
-Write-Verbose -Verbose "Setting Driver $UnattendXmlTest"
-$UnattendXmlTest | Out-File -FilePath $UnattendPath -Encoding utf8
+Write-Verbose -Verbose "Setting Driver $UnattendXml"
+$UnattendXml | Out-File -FilePath $UnattendPath -Encoding utf8
 wpeutil reboot
