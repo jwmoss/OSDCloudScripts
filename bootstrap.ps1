@@ -46,6 +46,9 @@ Get-ChildItem -Path "C:\Drivers\NUCDrivers" -Recurse | ForEach-Object {
 #Write-Host -ForegroundColor Green "Restarting in 20 seconds!"
 #Start-Sleep -Seconds 20
 
+## Get the DNS Name and set as the computername
+$ComputerName = "nuc-33431"
+
 $PathPanther = 'C:\Windows\Panther'
 if (-NOT (Test-Path $PathPanther)) {
     New-Item -Path $PathPanther -ItemType Directory -Force | Out-Null
@@ -90,6 +93,7 @@ $UnattendXml = @"
         </component>
         <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <TimeZone>UTC</TimeZone>
+            <ComputerName>$ComputerName</ComputerName>
         </component>
     </settings>
     <settings pass="oobeSystem">
